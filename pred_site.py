@@ -132,7 +132,7 @@ async def get_prediction(ticker, days):
     # Create a plot of the last 14 days
     last_14_days = df[-14 - days:]
     fig1 = go.Figure()
-    fig.add_scattergl(x=df.index, y=df['Close'], line=dict(color="#37ff00"))
+    fig1.add_scattergl(x=df.index, y=df['Close'], line=dict(color="#37ff00"))
     fig1.add_scattergl(x=df.index, y=df['Close'][:-days], line=dict(color="#37ff00"), name='Реальная цена')
     fig1.add_scattergl(x=df.index, y=df['Close'][-days - 1:], line=dict(color="#0b6db8"), name='Прогноз')
     fig1.layout.update(title_text=f'', xaxis_rangeslider_visible=True)
