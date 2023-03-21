@@ -145,9 +145,9 @@ async def get_prediction(ticker, days):
 
 async def showing_data():
     data_tbl = await get_data(selected_stock)
-
+    k = data_tbl.iloc[::-1]
     st.subheader(f'Данные {selected_stock}')
-    st.dataframe(data_tbl)
+    st.dataframe(k)
     data = data_tbl.tail(200)
     fig = go.Figure()
     gr_tp = st.selectbox('Выберите тип графика', ('Свечи', 'Линия'))
