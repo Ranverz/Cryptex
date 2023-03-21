@@ -81,7 +81,7 @@ async def get_data_and_train(ticker_symbol):
 
     # Create a numpy array of the feature data
     features = np.array(df[feature_cols])
-    nn_state = st.text('Модель обучается...')
+    nn_state = st.text(f'Модель обучается...эпохи:{num_epochs}batch:{batch_size}')
 
     # Scale the data using a MinMaxScaler
     scaler = MinMaxScaler(feature_range=(0, 1))
