@@ -79,8 +79,8 @@ async def showing_data():
     indf = f'RSI {ind["RSI"]}\nMACD {ind["MACD.macd"]}\nEMA30 {ind["EMA30"]}'
 
     st.write(f'Рекомендация: {sm["RECOMMENDATION"]}')
-    st.write(f'покупать: {sm["BUY"]}')
-    st.write(f'продавать: {sm["SELL"]}')
+    st.write(f'покупать: :green[{sm["BUY"]}]')
+    st.write(f'продавать: :red[{sm["SELL"]}]')
     st.write(f'держать: {sm["NEUTRAL"]}')
     st.write(indf)
 
