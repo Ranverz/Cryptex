@@ -96,9 +96,6 @@ async def get_data_and_train(ticker_symbol):
 
     df.set_index('Date', inplace=True)
     df.index = pd.to_datetime(df.index)
-    nn_state1.text('')
-    nn_state2.text('')
-    nn_state3.text('')
     return df, scaler
 
 
@@ -138,6 +135,8 @@ async def get_prediction(ticker, days):
     df_pr = df[['Close']][-days:]
     # Send the predicted prices and plot to the user
     df.drop(index=df.index[-days:], axis=0, inplace=True)
+    nn_state1.text('')
+    nn_state2.text('')
     nn_state3.text('')
 
     return predictions, pct_change, change, fig1, df_pr
