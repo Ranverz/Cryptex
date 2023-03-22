@@ -113,7 +113,7 @@ async def get_prediction(ticker, days):
 
     last_window = scaler.transform(df[-lookback:][feature_cols])
     last_window = np.expand_dims(last_window, axis=0)
-
+    nn_state3.text('Прогнозирование...')
     predictions = []
     for i in range(days):
         prediction = model.predict(last_window)
@@ -125,7 +125,7 @@ async def get_prediction(ticker, days):
     next_days = pd.date_range(start=df.index[-1], periods=days + 1, freq='D')[1:]
     for i, price in enumerate(predictions):
         df.loc[next_days[i], 'Close'] = price
-
+    nn_state3.text('Отрисовка графика...')
     # Create a plot of the last 14 days
     last_14_days = df[-14 - days:]
     fig1 = go.Figure()
@@ -138,6 +138,7 @@ async def get_prediction(ticker, days):
     df_pr = df[['Close']][-days:]
     # Send the predicted prices and plot to the user
     df.drop(index=df.index[-days:], axis=0, inplace=True)
+    nn_state3.text('')
 
     return predictions, pct_change, change, fig1, df_pr
 
