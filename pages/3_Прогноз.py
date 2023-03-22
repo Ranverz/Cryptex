@@ -152,11 +152,11 @@ async def showing_data():
         if ch > 0:
             st.write(
                 f'Предполагаемая цена на {(datetime.now() + timedelta(days=n_days)).strftime("%d-%m-%Y")} для {selected_stock_for_pred}:\n{pred[-1]:.9f} $')
-            st.write(f'Рост: +{ch:.9f} (+{pct_ch:.3f}%)')
+            st.write(f':green[Рост: +{ch:.9f} (+{pct_ch:.3f}%)]')
         else:
             st.write(
                 f'Предполагаемая цена на {(datetime.now() + timedelta(days=n_days)).strftime("%d-%m-%Y")} для {selected_stock_for_pred}:\n{pred[-1]:.9f} $')
-            st.write(f'Падение: {ch:.9f} ({pct_ch:.3f}%)')
+            st.write(f':red[Падение: {ch:.9f} ({pct_ch:.3f}%)]')
 
 
 asyncio.run(showing_data())
