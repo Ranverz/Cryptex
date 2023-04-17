@@ -6,7 +6,6 @@ from tradingview_ta import TA_Handler, Interval
 from io import StringIO
 import asyncio
 
-
 st.title("Cryptex")
 
 
@@ -45,14 +44,19 @@ async def get_data(ticker):
     return df
 
 
-crypto = (
-    'BTC-USD', 'ETH-USD', 'BNB-USD', 'MATIC-USD', 'XRP-USD', 'SOL-USD', 'LTC-USD', 'CFX-USD', 'DOGE-USD',
-    'STX-USD', 'LINK-USD', 'MAGIC-USD', 'SHIB-USD')
-
-selected_stock = st.selectbox("Выберите криптовалюту", crypto)
+crypto = ('Свой вариант ниже',
+          'BTC-USD', 'ETH-USD', 'BNB-USD', 'MATIC-USD', 'XRP-USD', 'SOL-USD', 'LTC-USD', 'CFX-USD', 'DOGE-USD',
+          'STX-USD', 'LINK-USD', 'MATIC-USD', 'SHIB-USD', 'ADA-USD', 'STETH-USD', 'HEX-USD', 'DOT-USD', 'AVAX-USD',
+          'TRX-USD',
+          'LINK-USD', 'ATOM-USD',)
 
 
 async def showing_data():
+    selected_stock = st.selectbox("Выберите криптовалюту", crypto)
+    selected_stock1 = st.text_input('Ваша криптовалюта (*symbol*-USD)')
+    if selected_stock == 'Свой вариант ниже':
+        selected_stock = selected_stock1
+
     data_tbl = await get_data(selected_stock)
     k = data_tbl.iloc[::-1]
     st.subheader(f'Данные {selected_stock}')
@@ -76,13 +80,16 @@ async def showing_data():
 
     sm, ind = await get_tv_crypto(selected_stock)
 
-    indf = f'RSI {ind["RSI"]}\nMACD {ind["MACD.macd"]}\nEMA30 {ind["EMA30"]}'
+    # indf = f'RSI {ind["RSI"]}\nMACD {ind["MACD.macd"]}\nEMA30 {ind["EMA30"]}'
+
+    total = sm["BUY"] + sm["SELL"] + sm["NEUTRAL"]
 
     st.write(f'Рекомендация: {sm["RECOMMENDATION"]}')
-    st.write(f'покупать: :green[{sm["BUY"]}]')
-    st.write(f'продавать: :red[{sm["SELL"]}]')
-    st.write(f'держать: {sm["NEUTRAL"]}')
-    st.write(indf)
+    st.write(f':green[покупать]: {sm["BUY"]}/{total}')
+    st.write(f':red[продавать]: {sm["SELL"]}/{total}')
+    st.write(f'держать: {sm["NEUTRAL"]}/{total}')
+    # st.write(indf)
+    st.write(ind)
 
 
 asyncio.run(showing_data())

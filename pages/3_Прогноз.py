@@ -27,11 +27,17 @@ model = tf.keras.Sequential([
     tf.keras.layers.Dense(units=1)
 ])
 model.compile(optimizer='adam', loss='mean_squared_error')
-crypto = (
-    'BTC-USD', 'ETH-USD', 'BNB-USD', 'MATIC-USD', 'XRP-USD', 'SOL-USD', 'LTC-USD', 'CFX-USD', 'DOGE-USD',
-    'STX-USD', 'LINK-USD', 'MAGIC-USD', 'SHIB-USD')
+
+crypto = ('Свой вариант ниже',
+          'BTC-USD', 'ETH-USD', 'BNB-USD', 'MATIC-USD', 'XRP-USD', 'SOL-USD', 'LTC-USD', 'CFX-USD', 'DOGE-USD',
+          'STX-USD', 'LINK-USD', 'MATIC-USD', 'SHIB-USD', 'ADA-USD', 'STETH-USD', 'HEX-USD', 'DOT-USD', 'AVAX-USD',
+          'TRX-USD',
+          'LINK-USD', 'ATOM-USD',)
 
 selected_stock_for_pred = st.selectbox("Выберите криптовалюту для прогноза", crypto)
+selected_stock1_for_pred = st.text_input('Ваша криптовалюта (*symbol*-USD)')
+if selected_stock_for_pred == 'Свой вариант ниже':
+    selected_stock_for_pred = selected_stock1_for_pred
 n_days = st.number_input('Количество дней для прогноза:', value=1)
 
 st.write("Параметры ниже влияют на качество прогноза")
@@ -41,13 +47,9 @@ submit = st.button("Получить прогноз")
 
 if submit:
     st.session_state["n_days"] = n_days
-    nn_state1 = st.text(f'Вы получите прогноз на {n_days} дней')
+    nn_state1 = st.text(f'Вы получите прогноз на {n_days} дней для {selected_stock_for_pred}')
     nn_state2 = st.text(f'эпохи: {num_epochs}, batch: {batch_size}')
     nn_state3 = st.text(f'Модель обучается...')
-
-crypto = (
-    'BTC-USD', 'ETH-USD', 'BNB-USD', 'MATIC-USD', 'XRP-USD', 'SOL-USD', 'LTC-USD', 'CFX-USD', 'DOGE-USD',
-    'STX-USD', 'LINK-USD', 'MAGIC-USD', 'SHIB-USD')
 
 
 async def fetch(session, url, params, headers, ticker):
