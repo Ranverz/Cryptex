@@ -52,7 +52,7 @@ crypto = ('Свой вариант ниже',
 
 
 async def showing_data():
-    selected_stock = st.selectbox("Выберите криптовалюту", crypto)
+    selected_stock = st.selectbox("Выберите криптовалюту", crypto, value='BTC-USD')
     selected_stock1 = st.text_input('Ваша криптовалюта (*symbol*-USD)')
     if selected_stock == 'Свой вариант ниже':
         selected_stock = selected_stock1
