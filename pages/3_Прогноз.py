@@ -33,8 +33,10 @@ crypto = ('Свой вариант ниже',
           'STX-USD', 'LINK-USD', 'MATIC-USD', 'SHIB-USD', 'ADA-USD', 'STETH-USD', 'HEX-USD', 'DOT-USD', 'AVAX-USD',
           'TRX-USD',
           'LINK-USD', 'ATOM-USD',)
+dfi = crypto.index('BTC-USD')
 
-selected_stock_for_pred = st.selectbox("Выберите криптовалюту для прогноза", crypto)
+
+selected_stock_for_pred = st.selectbox("Выберите криптовалюту для прогноза", crypto, index=dfi)
 selected_stock1_for_pred = st.text_input('Ваша криптовалюта (*symbol*-USD)')
 if selected_stock_for_pred == 'Свой вариант ниже':
     selected_stock_for_pred = selected_stock1_for_pred
@@ -128,9 +130,33 @@ async def get_prediction(ticker, days):
     # Create a plot of the last 14 days
     last_14_days = df[-14 - days:]
     fig1 = go.Figure()
-    fig1.add_scattergl(x=df.index, y=df['Close'][:-days], line=dict(color="#37ff00"), name='Реальная цена')
-    fig1.add_scattergl(x=df.index[-days:], y=df['Close'][-days:], line=dict(color="#0b6db8"), name='Прогноз')
-    fig1.layout.update(xaxis_rangeslider_visible=True)
+    fig1.add_scattergl(x=df.index[:-days], y=df['Close'].dropna()[:-days], line=dict(color="#37ff00", dash='solid'), name='Реальная цена')
+    fig1.add_scattergl(x=df.index[-days:], y=df['Close'].dropna()[-days:], line=dict(color="#0b6db8", dash='solid'), name='Прогноз')
+    fig1.update_layout(
+        xaxis=dict(
+            rangeselector=dict(
+                buttons=list([
+                    dict(count=1,
+                         label="1m",
+                         step="month",
+                         stepmode="backward"),
+                    dict(count=6,
+                         label="6m",
+                         step="month",
+                         stepmode="backward"),
+                    dict(count=1,
+                         label="1y",
+                         step="year",
+                         stepmode="backward"),
+                    dict(step="all")
+                ])
+            ),
+            rangeslider=dict(
+                visible=True
+            ),
+            type="date"
+        )
+    )
 
     change = df["Close"].iloc[-1] - df["Close"].iloc[-(1 + days)]
     pct_change = ((df["Close"].iloc[-1] / df["Close"].iloc[-(1 + days)]) - 1) * 100
@@ -149,6 +175,7 @@ async def showing_data():
         pred, pct_ch, ch, fg, df_pre = await get_prediction(selected_stock_for_pred, n_days)
         st.subheader(f'Прогноз для {selected_stock_for_pred}')
         st.dataframe(df_pre)
+        #ndp = st.slider('Количество дней на графике:', 1, 365, value=n_days)
         st.plotly_chart(fg)
 
         if ch > 0:

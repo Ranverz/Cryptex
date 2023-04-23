@@ -71,12 +71,64 @@ async def showing_data():
             go.Candlestick(x=data['Date'], open=data['Open'], high=data['High'], low=data['Low'], close=data['Close'],
                            name='Цена закрытия'))
         fig.layout.update(title_text=f'График {selected_stock}', xaxis_rangeslider_visible=True)
+        fig.update_layout(
+            xaxis=dict(
+                rangeselector=dict(
+                    buttons=list([
+                        dict(count=1,
+                             label="1 месяц",
+                             step="month",
+                             stepmode="backward"),
+                        dict(count=6,
+                             label="6 месяцев",
+                             step="month",
+                             stepmode="backward"),
+                        dict(count=1,
+                             label="1 год",
+                             step="year",
+                             stepmode="backward"),
+                        dict(label='Все',
+                             step="all")
+                    ])
+                ),
+                rangeslider=dict(
+                    visible=True
+                ),
+                type="date"
+            )
+        )
         st.plotly_chart(fig)
 
     if gr_tp == 'Линия':
         fig.add_trace(
             go.Scatter(x=data['Date'], y=data['Close'], line=dict(color="#0ccbcf"), name='Цена закрытия'))
         fig.layout.update(title_text=f'График {selected_stock}', xaxis_rangeslider_visible=True)
+        fig.update_layout(
+            xaxis=dict(
+                rangeselector=dict(
+                    buttons=list([
+                        dict(count=1,
+                             label="1 месяц",
+                             step="month",
+                             stepmode="backward"),
+                        dict(count=6,
+                             label="6 месяцев",
+                             step="month",
+                             stepmode="backward"),
+                        dict(count=1,
+                             label="1 год",
+                             step="year",
+                             stepmode="backward"),
+                        dict(label='Все',
+                             step="all")
+                    ])
+                ),
+                rangeslider=dict(
+                    visible=True
+                ),
+                type="date"
+            )
+        )
         st.plotly_chart(fig)
 
     sm, ind = await get_tv_crypto(selected_stock)
