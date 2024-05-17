@@ -23,12 +23,13 @@ async def get_tv_crypto(ticker):
     return s, l
 
 
-async def fetch(session, url, params, headers, ticker):
+async def fetch(session, url, params, headers):
     async with session.get(url, params=params, headers=headers) as response:
+        response.raise_for_status()
         return await response.text()
 
 
-async def get_data(ticker):
+async def get_data1(ticker):
     url = f'https://query1.finance.yahoo.com/v7/finance/download/{ticker}?'
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.57'
@@ -39,8 +40,14 @@ async def get_data(ticker):
         'events': 'history'
     }
     async with aiohttp.ClientSession() as session:
-        response = await fetch(session, url, params, headers, ticker)
-        df = pd.read_csv(StringIO(response)).dropna()
+        csv_data = await fetch(session, url, params, headers)
+        return csv_data
+
+
+async def get_data(ticker):
+    csv_data = await get_data1(ticker)
+    data = StringIO(csv_data)
+    df = pd.read_csv(data)
     return df
 
 
