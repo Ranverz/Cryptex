@@ -9,6 +9,8 @@ import tensorflow as tf
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 
+import yfinance as yf
+
 from datetime import datetime, timedelta
 
 st.title("Cryptex")
@@ -60,7 +62,7 @@ async def fetch(session, url, params, headers):
         return await response.text()
 
 
-async def get_data(ticker):
+async def get_data1(ticker):
     url = f'https://query1.finance.yahoo.com/v7/finance/download/{ticker}?'
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.57'
@@ -73,6 +75,15 @@ async def get_data(ticker):
     async with aiohttp.ClientSession() as session:
         response = await fetch(session, url, params, headers)
         df = pd.read_table(StringIO(response), sep=',').dropna()
+    return df
+
+
+async def get_data(ticker):
+    s = yf.Ticker(ticker)
+    df = s.history('10000d')
+    df.index = pd.to_datetime(df.index)
+    df.reset_index(inplace=True)
+    df.rename(columns={'index' : 'Date'}, inplace=True)
     return df
 
 
