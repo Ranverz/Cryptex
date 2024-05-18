@@ -23,7 +23,7 @@ async def get_tv_crypto(ticker):
     return s, l
 
 
-async def fetch(session, url, params, headers, ticker):
+async def fetch(session, url, params, headers):
     async with session.get(url, params=params, headers=headers) as response:
         return await response.text()
 
@@ -39,7 +39,7 @@ async def get_data(ticker):
         'events': 'history'
     }
     async with aiohttp.ClientSession() as session:
-        response = await fetch(session, url, params, headers, ticker)
+        response = await fetch(session, url, params, headers)
         df = pd.read_csv(StringIO(response)).dropna()
     return df
 
