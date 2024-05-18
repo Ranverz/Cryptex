@@ -40,7 +40,7 @@ async def get_data(ticker):
     }
     async with aiohttp.ClientSession() as session:
         response = await fetch(session, url, params, headers)
-        df = pd.read_table(StringIO(response), sep=',').dropna()
+        df = pd.read_table(StringIO(response), sep=',', on_bad_line='skip).dropna()
     return df
 
 
