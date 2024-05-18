@@ -54,8 +54,9 @@ if submit:
     nn_state3 = st.text(f'Модель обучается...')
 
 
-async def fetch(session, url, params, headers, ticker):
+async def fetch(session, url, params, headers):
     async with session.get(url, params=params, headers=headers) as response:
+        response.raise_for_status()
         return await response.text()
 
 
@@ -70,8 +71,8 @@ async def get_data(ticker):
         'events': 'history'
     }
     async with aiohttp.ClientSession() as session:
-        response = await fetch(session, url, params, headers, ticker)
-        df = pd.read_csv(StringIO(response)).dropna()
+        response = await fetch(session, url, params, headers)
+        df = pd.read_table(StringIO(response), sep=',').dropna()
     return df
 
 
