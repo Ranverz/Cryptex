@@ -29,7 +29,7 @@ async def fetch(session, url, params, headers):
         return await response.text()
 
 
-async def get_data1(ticker):
+async def get_data(ticker):
     url = f'https://query1.finance.yahoo.com/v7/finance/download/{ticker}?'
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.57'
@@ -40,14 +40,8 @@ async def get_data1(ticker):
         'events': 'history'
     }
     async with aiohttp.ClientSession() as session:
-        csv_data = await fetch(session, url, params, headers)
-        return csv_data
-
-
-async def get_data(ticker):
-    csv_data = await get_data1(ticker)
-    data = StringIO(csv_data)
-    df = pd.read_csv(data).dropna()
+        response = await fetch(session, url, params, headers, ticker)
+        df = pd.read_csv(StringIO(response)).dropna()
     return df
 
 
