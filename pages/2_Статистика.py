@@ -23,9 +23,8 @@ async def get_tv_crypto(ticker):
     return s, l
 
 
-async def fetch(session, url, params, headers):
+async def fetch(session, url, params, headers, ticker):
     async with session.get(url, params=params, headers=headers) as response:
-        #response.raise_for_status()
         return await response.text()
 
 
