@@ -30,7 +30,7 @@ async def fetch(session, url, params, headers):
         return await response.text()
 
 
-async def get_data1(ticker):
+async def get_data(ticker):
     url = f'https://query1.finance.yahoo.com/v7/finance/download/{ticker}?'
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.57'
@@ -41,21 +41,11 @@ async def get_data1(ticker):
         'events': 'history'
     }
     async with aiohttp.ClientSession() as session:
-        cookies = session.cookie_jar()
-        csv_data = await fetch(session, url, params, headers)
-        return csv_data
-
-async def get_data(ticker):
-    s = yf.Ticker(ticker)
-    df = s.history(period="100000d")
+        response = await fetch(session, url, params, headers)
+        df = pd.read_table(StringIO(response), sep=',').dropna()
     return df
 
 
-async def get_data2(ticker):
-    csv_data = await get_data1(ticker)
-    data = StringIO(csv_data)
-    df = pd.read_csv(data)
-    return df
 
 
 crypto = ('Свой вариант ниже',
