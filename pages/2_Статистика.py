@@ -47,7 +47,7 @@ async def get_data1(ticker):
 async def get_data(ticker):
     csv_data = await get_data1(ticker)
     data = StringIO(csv_data)
-    df = pd.read_csv(data)
+    df = pd.read_csv(data).dropna()
     return df
 
 
